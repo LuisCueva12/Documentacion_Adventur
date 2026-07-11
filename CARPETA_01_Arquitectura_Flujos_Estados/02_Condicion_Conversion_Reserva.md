@@ -124,7 +124,7 @@ FUNCIÓN ConvertirCotizacionEnReserva(cotizacion_id, datos_flujo_5_pasos):
         pasajeros: resultado_flujo.pasajeros,
         total_pagado: resultado_flujo.total_pagado,
         saldo: resultado_flujo.monto_total - resultado_flujo.total_pagado,
-        estado: "CONFIRMADA" SI resultado_flujo.total_pagado >= cotizacion.total * PORCENTAJE_ADELANTO_MININO
+        estado: "CONFIRMADA" SI resultado_flujo.total_pagado >= cotizacion.total * PORCENTAJE_ADELANTO_MINIMO
                 SINO "PENDIENTE",
         creado_por: usuario_actual.id
     })

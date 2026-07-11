@@ -102,7 +102,7 @@ adventur-frontend/
     │       │   ├── FiltrosReserva.vue
     │       │   ├── TablaReservas.vue
     │       │   ├── Flujo5Pasos.vue           ← Contenedor del flujo
-    │       │   ├── Paso1SeleccionCliente.vue
+    │       │   ├── Paso1SelecciónCliente.vue
     │       │   ├── Paso2DatosViaje.vue
     │       │   ├── Paso3RegistroPasajeros.vue
     │       │   ├── Paso4RegistroPagos.vue

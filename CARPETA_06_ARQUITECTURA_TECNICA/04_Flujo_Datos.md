@@ -149,12 +149,12 @@
 
 ```
          ┌──────────┐
-         │ Borrador │  ← Se crea así
+         │ Propuesta│  ← Se crea así (Borrador, sin enviar)
          └────┬─────┘
               │ POST /api/cotizaciones/{id}/enviar
               ▼
          ┌──────────┐
-         │ Enviado  │  ← Se envía al cliente
+         │ Enviado  │  ← Se envía al cliente por WhatsApp/Email/PDF
          └────┬─────┘
               │ Cliente abre link
               ▼
@@ -166,25 +166,26 @@
       │               │
       ▼               ▼
   ┌──────────┐   ┌──────────┐
-  │ Aprobado │   │Rechazado │  ← Terminal
+  │ Aprobado │   │ Perdido  │  ← Terminal
   └────┬─────┘   └──────────┘
-      │               │
-      ▼               ▼
-  ┌──────────┐   ┌──────────┐
-  │Convertido│   │ Perdido  │  ← Terminal
-  └──────────┘   └──────────┘
+      │
+      ▼
+  ┌──────────┐
+  │Convertido│  ← Se genera una reserva
+  └──────────┘
 ```
+
+**Nota:** Una cotización puede marcarse como `Perdido` desde cualquier estado posterior a `Enviado` (Enviado, Visto, Aprobado). No existe estado "Rechazado" como tal — si el cliente no acepta, la cotización pasa a `Perdido` con un motivo registrado.
 
 ### Eventos disparados en cada transición:
 
 | Transición | Evento de Dominio | Efecto en Sistema |
 |-----------|-------------------|-------------------|
-| Borrador → Enviado | `CotizacionEnviada` | Crea seguimiento "Programado" para 3 días después |
-| Enviado → Visto | `CotizacionVista` | Actualiza seguimiento a "Visto", notifica vendedor |
-| Visto → Aprobado | `CotizacionAprobada` | Registra descuento si aplica, actualiza seguimiento |
-| Visto → Rechazado | `CotizacionRechazada` | Registra motivo, notifica vendedor |
-| Aprobado → Convertido | `CotizacionConvertida` | Automáticamente crea reserva en estado Borrador |
-| * → Perdido | `CotizacionPerdida` | Registra motivo, cierra seguimientos |
+| Propuesta → Enviado | `CotizacionEnviada` | Crea seguimiento "Programado" para 3 días después |
+| Enviado → Visto | `CotizacionVista` | Actualiza seguimiento a "Realizado", notifica vendedor |
+| Visto → Aprobado | `CotizacionAprobada` | Registra descuento si aplica |
+| Aprobado → Convertido | `CotizacionConvertida` | Crea reserva en estado Pendiente automáticamente |
+| * → Perdido | `CotizacionPerdida` | Registra motivo, cierra seguimientos activos |
 
 ---
 
@@ -192,34 +193,33 @@
 
 ```
          ┌───────────┐
-         │ Borrador  │  ← Se crea así (desde cotización aprobada)
+         │ Borrador  │  ← Se crea al convertir cotización aprobada
          └─────┬─────┘
-               │ Completa datos + pago mínimo
+               │ Vendedor completa datos (pasajeros, viaje)
                ▼
          ┌───────────┐
-         │ Pendiente │  ← Cliente confirmó, pagó adelanto
+         │ Pendiente │  ← Datos completos, falta pago mínimo
+         └─────┬─────┘
+               │ Cliente paga adelanto ≥ 30%
+               ▼
+         ┌───────────┐
+         │ Confirmada│  ← Viaje asegurado, saldo puede pagarse después
          └─────┬─────┘
                │
       ┌────────┴────────┐
       │                 │
       ▼                 ▼
-  ┌───────────┐   ┌───────────┐
-  │ Confirmada│   │ Anulada   │  ← Terminal (soft delete)
-  └─────┬─────┘   └───────────┘
-        │
-        │ Viaje realizado
-        ▼
-  ┌───────────┐
-  │Finalizada │  ← Terminal
-  └───────────┘
+   ┌───────────┐   ┌───────────┐
+   │Finalizada │   │ Anulada   │  ← Terminal (soft delete)
+   └───────────┘   └───────────┘
 ```
 
 ### Condiciones para cada transición:
 
 | Transición | Condición |
 |-----------|-----------|
-| Borrador → Pendiente | Pasajeros completos + pago adelanto ≥ 30% del total |
-| Pendiente → Confirmada | Saldo pendiente = 0 (todos los pagos registrados) |
+| Borrador → Pendiente | Pasajeros completos + datos de viaje completos |
+| Pendiente → Confirmada | Total pagado ≥ total reserva × 30% (adelanto mínimo) |
 | Pendiente → Anulada | Motivo de anulación + soft delete |
 | Confirmada → Anulada | Solo si faltan > 48h para el viaje |
 | Confirmada → Finalizada | Fecha viaje ya pasó + operaciones confirma |
@@ -230,14 +230,16 @@
 
 ```
 Reserva creada con monto_total = 1250.00
+adelanto_mínimo = 1250.00 × 30% = 375.00
+
+  ├─ Pago 1: 200.00  → total_pagado = 200.00  → menor a 375  → estado: Pendiente
+  ├─ Pago 2: 200.00  → total_pagado = 400.00  → ≥ 375 ✓     → estado: Confirmada ★
   │
-  ├─ Pago 1: 500.00  → saldo = 750.00  → estado: Pendiente
-  ├─ Pago 2: 300.00  → saldo = 450.00  → estado: Pendiente
-  ├─ Pago 3: 450.00  → saldo = 0.00    → estado: Confirmada ★
+  ├─ [Luego del viaje, se pagan los 850.00 restantes antes o después]
   │
-  └─ Anular Pago 2 (motivo: devolución)
-       → total_pagado = 950.00
-       → saldo = 300.00
+  └─ Anular Pago 1 (motivo: devolución parcial)
+       → total_pagado = 200.00
+       → 200.00 < 375
        → estado: Pendiente (vuelve atrás)
 ```
 
@@ -247,6 +249,15 @@ Reserva creada con monto_total = 1250.00
 suma_pagos ≤ monto_total   [IR-06]
 cada_pago.truncado_2_decimales  [R2]
 adelanto_mínimo = monto_total × 0.30
+
+SI primer_pago.monto >= adelanto_mínimo:
+    → Confirmada inmediatamente
+SI NO:
+    → Pendiente hasta alcanzar adelanto_mínimo
+
+SI en cualquier momento suma_pagos == monto_total:
+    → Saldo = 0.00 (esto puede ocurrir antes o después de Confirmada)
+```
   → primer_pago.monto ≥ adelanto_mínimo
 ```
 

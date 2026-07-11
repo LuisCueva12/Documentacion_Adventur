@@ -1,0 +1,268 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="flecha" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <linearGradient id="gradFront" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#42b883;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#35495e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="gradApi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff2d20;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#e74430;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="gradCore" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="gradInfra" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="gradBD" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#336791;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#2b5a81;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="gradHex" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.05"/>
+    </linearGradient>
+    <filter id="sombra">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="1200" height="900" fill="#f8fafc" rx="8"/>
+
+  <!-- Título -->
+  <text x="600" y="40" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">Arquitectura Adventur Travel — API + SPA</text>
+  <text x="600" y="60" text-anchor="middle" font-size="12" fill="#64748b">Laravel + PostgreSQL | Vue 3 + Vite | Hexagonal Architecture</text>
+
+  <!-- ============================================ -->
+  <!-- CAPA 1: FRONTEND (Vue 3) -->
+  <!-- ============================================ -->
+  <rect x="40" y="85" width="340" height="370" rx="12" fill="url(#gradFront)" filter="url(#sombra)"/>
+  <text x="210" y="115" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">FRONTEND SPA</text>
+  <text x="210" y="132" text-anchor="middle" font-size="11" fill="#d1fae5">Vue 3 + Vite + PrimeVue</text>
+
+  <!-- Navegador -->
+  <rect x="60" y="150" width="300" height="50" rx="6" fill="#fff" opacity="0.95"/>
+  <text x="210" y="172" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">Navegador (Chrome / Firefox / Edge)</text>
+  <text x="210" y="188" text-anchor="middle" font-size="11" fill="#64748b">HTML · CSS · JS · SPA sin recarga</text>
+
+  <!-- Flecha navegador → Vue Router -->
+  <line x1="210" y1="200" x2="210" y2="220" stroke="#fff" stroke-width="1.5" marker-end="url(#flecha)"/>
+
+  <!-- Vue Router -->
+  <rect x="75" y="220" width="270" height="35" rx="6" fill="#fff" opacity="0.95"/>
+  <text x="210" y="242" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">Vue Router 4</text>
+
+  <line x1="210" y1="255" x2="210" y2="270" stroke="#fff" stroke-width="1.5" marker-end="url(#flecha)"/>
+
+  <!-- Vistas + Componentes -->
+  <rect x="60" y="270" width="300" height="40" rx="6" fill="#fff" opacity="0.95"/>
+  <text x="210" y="290" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">Vistas · Componentes · Layouts</text>
+  <text x="210" y="303" text-anchor="middle" font-size="10" fill="#64748b">PrimeVue DataTable · Stepper · Formularios · Charts</text>
+
+  <line x1="210" y1="310" x2="210" y2="325" stroke="#fff" stroke-width="1.5" marker-end="url(#flecha)"/>
+
+  <!-- Capa de servicios -->
+  <rect x="60" y="325" width="135" height="35" rx="6" fill="#fff" opacity="0.95"/>
+  <text x="127" y="342" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">TanStack Query</text>
+  <text x="127" y="355" text-anchor="middle" font-size="9" fill="#64748b">Caching · Refetch</text>
+
+  <rect x="210" y="325" width="135" height="35" rx="6" fill="#fff" opacity="0.95"/>
+  <text x="277" y="342" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">Pinia (Store)</text>
+  <text x="277" y="355" text-anchor="middle" font-size="9" fill="#64748b">Auth · UI · Filtros</text>
+
+  <line x1="210" y1="360" x2="210" y2="378" stroke="#fff" stroke-width="1.5" marker-end="url(#flecha)"/>
+
+  <!-- Axios -->
+  <rect x="75" y="378" width="270" height="30" rx="6" fill="#fff" opacity="0.95"/>
+  <text x="210" y="397" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">Axios HTTP Client</text>
+  <text x="210" y="403" text-anchor="middle" font-size="9" fill="#64748b">Interceptors · Token Bearer</text>
+
+  <!-- Flecha a API -->
+  <line x1="380" y1="270" x2="480" y2="270" stroke="#64748b" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#flecha)"/>
+  <text x="430" y="262" text-anchor="middle" font-size="10" fill="#64748b">HTTPS · JSON</text>
+  <text x="430" y="245" text-anchor="middle" font-size="10" fill="#64748b">Bearer Token</text>
+
+  <!-- ============================================ -->
+  <!-- CAPA 2: API LARAVEL (Backend) -->
+  <!-- ============================================ -->
+  <rect x="470" y="85" width="690" height="370" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="2" filter="url(#sombra)"/>
+  <text x="815" y="108" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">API BACKEND — Laravel + Hexagonal</text>
+
+  <!-- === Capa Interfaces === -->
+  <rect x="490" y="120" width="650" height="95" rx="8" fill="#fee2e2" opacity="0.5"/>
+  <text x="815" y="135" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">INTERFACES DE ENTRADA (Laravel Http)</text>
+
+  <rect x="500" y="145" width="150" height="28" rx="5" fill="#fff" stroke="#fca5a5" stroke-width="1"/>
+  <text x="575" y="163" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Middlewares</text>
+
+  <rect x="660" y="145" width="150" height="28" rx="5" fill="#fff" stroke="#fca5a5" stroke-width="1"/>
+  <text x="735" y="163" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Form Requests</text>
+
+  <rect x="820" y="145" width="150" height="28" rx="5" fill="#fff" stroke="#fca5a5" stroke-width="1"/>
+  <text x="895" y="163" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">API Resources</text>
+
+  <rect x="540" y="180" width="350" height="25" rx="5" fill="#fff" stroke="#fca5a5" stroke-width="1"/>
+  <text x="715" y="197" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">Controladores (Api/CotizacionController, ReservaController, ...)</text>
+
+  <!-- Flecha Interfaces → Use Cases -->
+  <line x1="570" y1="215" x2="570" y2="240" stroke="#64748b" stroke-width="1.5" marker-end="url(#flecha)"/>
+  <text x="560" y="232" text-anchor="middle" font-size="9" fill="#64748b">inyecta</text>
+
+  <!-- === Capa Use Cases === -->
+  <rect x="490" y="240" width="310" height="90" rx="8" fill="#dbeafe" opacity="0.5"/>
+  <text x="645" y="255" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">CASOS DE USO (Application)</text>
+
+  <rect x="500" y="265" width="190" height="25" rx="4" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="595" y="282" text-anchor="middle" font-size="10" fill="#0f172a">CrearCotizaciónUseCase</text>
+
+  <rect x="500" y="295" width="190" height="25" rx="4" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="595" y="312" text-anchor="middle" font-size="10" fill="#0f172a">AplicarPagoUseCase</text>
+
+  <rect x="700" y="265" width="90" height="55" rx="4" fill="#fff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="745" y="282" text-anchor="middle" font-size="9" fill="#0f172a">+ 15 casos</text>
+  <text x="745" y="298" text-anchor="middle" font-size="9" fill="#0f172a">de uso</text>
+
+  <!-- Flecha Use Cases → Dominio -->
+  <line x1="570" y1="330" x2="570" y2="355" stroke="#64748b" stroke-width="1.5" marker-end="url(#flecha)"/>
+
+  <!-- === Capa Dominio === -->
+  <rect x="490" y="355" width="310" height="90" rx="8" fill="#fef3c7" opacity="0.5"/>
+  <text x="645" y="370" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400e">DOMINIO (Puertos)</text>
+
+  <rect x="500" y="380" width="90" height="25" rx="4" fill="#fff" stroke="#fcd34d" stroke-width="1"/>
+  <text x="545" y="397" text-anchor="middle" font-size="9" fill="#0f172a">Entidades</text>
+
+  <rect x="598" y="380" width="90" height="25" rx="4" fill="#fff" stroke="#fcd34d" stroke-width="1"/>
+  <text x="643" y="397" text-anchor="middle" font-size="9" fill="#0f172a">ValueObjects</text>
+
+  <rect x="696" y="380" width="95" height="25" rx="4" fill="#fff" stroke="#fcd34d" stroke-width="1"/>
+  <text x="743" y="397" text-anchor="middle" font-size="9" fill="#0f172a">Repository (int)</text>
+
+  <rect x="530" y="412" width="150" height="25" rx="4" fill="#fff" stroke="#fcd34d" stroke-width="1"/>
+  <text x="605" y="429" text-anchor="middle" font-size="9" fill="#0f172a">Eventos · Reglas R1-R4</text>
+
+  <!-- === Capa Infraestructura === -->
+  <rect x="820" y="240" width="320" height="205" rx="8" fill="#f3e8ff" opacity="0.5"/>
+  <text x="980" y="255" text-anchor="middle" font-size="11" font-weight="bold" fill="#6b21a8">INFRAESTRUCTURA (Adaptadores)</text>
+
+  <rect x="830" y="268" width="145" height="35" rx="5" fill="#fff" stroke="#c084fc" stroke-width="1"/>
+  <text x="902" y="285" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Persistencia</text>
+  <text x="902" y="298" text-anchor="middle" font-size="9" fill="#64748b">Eloquent ORM · PostgreSQL</text>
+
+  <rect x="985" y="268" width="145" height="35" rx="5" fill="#fff" stroke="#c084fc" stroke-width="1"/>
+  <text x="1057" y="285" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Servicios</text>
+  <text x="1057" y="298" text-anchor="middle" font-size="9" fill="#64748b">PDF (DomPDF) · Mail · Queue</text>
+
+  <rect x="830" y="315" width="300" height="35" rx="5" fill="#fff" stroke="#c084fc" stroke-width="1"/>
+  <text x="980" y="332" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Seguridad</text>
+  <text x="980" y="345" text-anchor="middle" font-size="9" fill="#64748b">Sanctum · CORS · Throttle · RBAC (Spatie)</text>
+
+  <rect x="830" y="360" width="300" height="35" rx="5" fill="#fff" stroke="#c084fc" stroke-width="1"/>
+  <text x="980" y="377" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Almacenamiento</text>
+  <text x="980" y="390" text-anchor="middle" font-size="9" fill="#64748b">Disco local (F1) → S3 (F2)</text>
+
+  <rect x="830" y="405" width="300" height="30" rx="5" fill="#fff" stroke="#c084fc" stroke-width="1"/>
+  <text x="980" y="424" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Colas: Sync (F1) → Redis + Horizon (F2)</text>
+
+  <!-- Flecha Dominio → Infra -->
+  <line x1="800" y1="400" x2="820" y2="370" stroke="#64748b" stroke-width="1.5" marker-end="url(#flecha)"/>
+  <text x="815" y="395" text-anchor="middle" font-size="9" fill="#64748b">implementa</text>
+
+  <!-- Flecha a BD -->
+  <line x1="1100" y1="240" x2="1100" y2="480" stroke="#64748b" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#flecha)"/>
+  <text x="1110" y="360" text-anchor="middle" font-size="10" fill="#64748b" transform="rotate(-90,1110,360)">TCP/IP</text>
+
+  <!-- ============================================ -->
+  <!-- CAPA 3: BASE DE DATOS -->
+  <!-- ============================================ -->
+  <rect x="40" y="485" width="1120" height="390" rx="12" fill="url(#gradBD)" filter="url(#sombra)"/>
+  <text x="600" y="515" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">POSTGRESQL 16+</text>
+  <text x="600" y="532" text-anchor="middle" font-size="11" fill="#bfdbfe">22 tablas · 13 tipos ENUM · Particionamiento · Row Level Security</text>
+
+  <!-- Tablas agrupadas por módulo -->
+  <!-- Módulo Ventas -->
+  <rect x="60" y="550" width="250" height="150" rx="8" fill="#fff" opacity="0.9"/>
+  <text x="185" y="572" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">VENTAS</text>
+  <line x1="75" y1="582" x2="295" y2="582" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="75" y="600" font-size="11" fill="#334155">• leads</text>
+  <text x="75" y="618" font-size="11" fill="#334155">• clientes</text>
+  <text x="75" y="636" font-size="11" fill="#334155">• cotizaciones</text>
+  <text x="75" y="654" font-size="11" fill="#334155">• cotizacion_detalle</text>
+  <text x="75" y="672" font-size="11" fill="#334155">• seguimientos</text>
+  <text x="75" y="690" font-size="11" fill="#334155">• motivos_perdida</text>
+
+  <!-- Módulo Operaciones -->
+  <rect x="330" y="550" width="250" height="150" rx="8" fill="#fff" opacity="0.9"/>
+  <text x="455" y="572" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">OPERACIONES</text>
+  <line x1="345" y1="582" x2="565" y2="582" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="345" y="600" font-size="11" fill="#334155">• reservas</text>
+  <text x="345" y="618" font-size="11" fill="#334155">• pasajeros</text>
+  <text x="345" y="636" font-size="11" fill="#334155">• pagos</text>
+  <text x="345" y="654" font-size="11" fill="#334155">• alojamientos</text>
+  <text x="345" y="672" font-size="11" fill="#334155">• servicios_reserva</text>
+  <text x="345" y="690" font-size="11" fill="#334155">• rutas</text>
+
+  <!-- Módulo Admin -->
+  <rect x="600" y="550" width="250" height="150" rx="8" fill="#fff" opacity="0.9"/>
+  <text x="725" y="572" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">ADMINISTRACIÓN</text>
+  <line x1="615" y1="582" x2="835" y2="582" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="615" y="600" font-size="11" fill="#334155">• usuarios</text>
+  <text x="615" y="618" font-size="11" fill="#334155">• roles</text>
+  <text x="615" y="636" font-size="11" fill="#334155">• permisos</text>
+  <text x="615" y="654" font-size="11" fill="#334155">• rol_permiso</text>
+  <text x="615" y="672" font-size="11" fill="#334155">• agencias (multi-T)</text>
+  <text x="615" y="690" font-size="11" fill="#334155">• canales_origen</text>
+
+  <!-- Módulo Config -->
+  <rect x="870" y="550" width="270" height="150" rx="8" fill="#fff" opacity="0.9"/>
+  <text x="1005" y="572" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">CONFIGURACIÓN</text>
+  <line x1="885" y1="582" x2="1125" y2="582" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="885" y="600" font-size="11" fill="#334155">• plantillas</text>
+  <text x="885" y="618" font-size="11" fill="#334155">• politicas_configuracion</text>
+  <text x="885" y="636" font-size="11" fill="#334155">• auditoria (particionada)</text>
+  <text x="885" y="654" font-size="11" fill="#334155">• secuencias_codigos</text>
+
+  <!-- Particionamiento -->
+  <rect x="60" y="720" width="400" height="60" rx="6" fill="#fff" opacity="0.9"/>
+  <text x="260" y="742" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">PARTICIONAMIENTO (Fase 2)</text>
+  <text x="75" y="762" font-size="11" fill="#334155">auditoria → PARTITION BY RANGE (año)  |  cotizaciones → por año (opcional)</text>
+
+  <!-- Row Level Security -->
+  <rect x="480" y="720" width="400" height="60" rx="6" fill="#fff" opacity="0.9"/>
+  <text x="680" y="742" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">ROW LEVEL SECURITY (Soft Delete)</text>
+  <text x="495" y="762" font-size="11" fill="#334155">Política: WHERE fecha_eliminacion IS NULL  |  Entidades protegidas: 11</text>
+
+  <!-- Índices -->
+  <rect x="900" y="720" width="240" height="60" rx="6" fill="#fff" opacity="0.9"/>
+  <text x="1020" y="742" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">ÍNDICES +40</text>
+  <text x="915" y="762" font-size="11" fill="#334155">Compuestos: (estado, fecha)  |  Búsqueda clientes: (documento, email)</text>
+
+  <!-- Flecha API → BD -->
+  <line x1="815" y1="455" x2="815" y2="485" stroke="#64748b" stroke-width="2" marker-end="url(#flecha)"/>
+
+  <!-- ============================================ -->
+  <!-- HEXAGONAL LABEL -->
+  <!-- ============================================ -->
+  <rect x="490" y="88" width="14" height="365" rx="2" fill="#f59e0b" opacity="0.4"/>
+  <text x="498" y="278" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold" transform="rotate(-90,498,278)">DEPENDENCIA HACIA ADENTRO</text>
+
+  <!-- Leyenda -->
+  <rect x="40" y="810" width="700" height="55" rx="6" fill="#fff" opacity="0.85"/>
+  <rect x="50" y="820" width="14" height="14" rx="3" fill="#fee2e2"/>
+  <text x="70" y="832" font-size="11" fill="#334155">Interfaces Laravel</text>
+  <rect x="150" y="820" width="14" height="14" rx="3" fill="#dbeafe"/>
+  <text x="170" y="832" font-size="11" fill="#334155">Casos de Uso</text>
+  <rect x="250" y="820" width="14" height="14" rx="3" fill="#fef3c7"/>
+  <text x="270" y="832" font-size="11" fill="#334155">Dominio (0% Laravel)</text>
+  <rect x="390" y="820" width="14" height="14" rx="3" fill="#f3e8ff"/>
+  <text x="410" y="832" font-size="11" fill="#334155">Infraestructura</text>
+  <rect x="510" y="820" width="14" height="14" rx="3" fill="#336791"/>
+  <text x="530" y="832" font-size="11" fill="#334155">PostgreSQL</text>
+  <text x="50" y="855" font-size="9" fill="#94a3b8">La flecha naranja marca la Regla de Dependencia: las capas internas NO conocen a las externas</text>
+</svg>

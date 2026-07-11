@@ -124,4 +124,4 @@ SI valores_anteriores != NULL Y valores_nuevos != NULL:
 
 ### 5.3 Retención de Datos
 
-Los registros de auditoría se conservan por **tiempo indefinido**. No existe política de purge o eliminación. Si porrazones de capacidad se requiere archivar, debe hacerse una copia de seguridad antes de cualquier purga, y esa copia debe estar disponible para consulta.
+Los registros de auditoría se conservan por **tiempo indefinido**. No existe política de purge o eliminación. Si por razones de capacidad se requiere archivar, debe hacerse una copia de seguridad antes de cualquier purga, y esa copia debe estar disponible para consulta.
