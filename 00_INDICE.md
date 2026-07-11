@@ -35,13 +35,21 @@ Docs/
 │   ├── 05_Requisitos_Funcionales_RF.md          — RF-01 a RF-20 con trazabilidad a carpetas
 │   └── 06_Requisitos_No_Funcionales_NF.md       — NF-01 a NF-08 con criterios y verificación
 │
-└── CARPETA_05_Salidas_Sistema/                  (3 archivos — 563+ líneas)
-    ├── 01_Documento_PDF_2_Paginas.md            — Estructura de datos + maquetas P1 y P2
-    ├── 02_Reportes_Gestion.md                   — 4 reportes + dashboard, filtros, formatos
-    └── 03_Criterios_Aceptacion.md               — CA-01 a CA-10, checklist pre-producción, regla final
+├── CARPETA_05_Salidas_Sistema/                  (3 archivos — 563+ líneas)
+│   ├── 01_Documento_PDF_2_Paginas.md            — Estructura de datos + maquetas P1 y P2
+│   ├── 02_Reportes_Gestion.md                   — 4 reportes + dashboard, filtros, formatos
+│   └── 03_Criterios_Aceptacion.md               — CA-01 a CA-10, checklist pre-producción, regla final
+│
+└── CARPETA_06_ARQUITECTURA_TECNICA/             (5 archivos)
+    ├── 00_Vision_General.md                     — Stack, principios, diagrama general, escalabilidad
+    ├── 01_Backend_Laravel_Hexagonal.md          — Hexagonal + DDD, capas, repositorios, casos de uso
+    ├── 02_API_REST_Endpoints.md                 — Endpoints, ejemplos request/response, códigos de error
+    ├── 03_Frontend_Vue_Vite.md                  — Componentes, rutas, stores, TanStack Query, PrimeVue
+    ├── 04_Flujo_Datos.md                        — Flujo completo request→response, máquinas de estado
+    └── 05_Despliegue.md                         — SiteGround → VPS, backup, CI/CD, costos
 ```
 
-**Total: 19 archivos — 3,070+ líneas de especificación agnóstica**
+**Total: 24 archivos — 3,070+ líneas de especificación agnóstica + arquitectura técnica**
 
 ---
 
@@ -59,6 +67,7 @@ Docs/
 | Reportes | CARPETA 03 (KPIs) + CARPETA 05 (reportes, dashboard) |
 | Configuración | CARPETA 04 (RBAC, auditoría) |
 | Documentos PDF | CARPETA 05 (estructura, maquetas) |
+| Arquitectura Técnica | CARPETA 06 (stack, endpoints, frontend, flujo, despliegue) |
 
 ---
 
