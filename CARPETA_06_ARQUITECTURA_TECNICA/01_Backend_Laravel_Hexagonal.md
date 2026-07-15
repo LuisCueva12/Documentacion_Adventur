@@ -87,6 +87,42 @@ app/
 
 ---
 
+## 2.1 Regla de Oro: el Core no conoce a Laravel/Eloquent
+
+Para que la arquitectura quede **bien definida** y pueda **crecer o acoplar otros sistemas**
+(POS, WooCommerce, otra BD, microservicios) sin romperse, se aplica una única regla
+estricta de aislamiento del Dominio y la Aplicación:
+
+> **`app/Core` NUNCA importa `App\Infraestructura`, ni `DB`/`Schema`, ni Modelos Eloquent.**
+> Toda dependencia externa entra por **puerto (interfaz)** y se resuelve en Infraestructura.
+
+### Qué está permitido / prohibido en `app/Core`
+
+| Situación | Estado | Dónde vive |
+|-----------|--------|-----------|
+| `use App\Infraestructura\...` | ❌ Prohibido | — |
+| `use Illuminate\Support\Facades\DB` / `Schema` | ❌ Prohibido | Solo en `app/Infraestructura` |
+| `extends Model` (Eloquent) | ❌ Prohibido | Solo en `app/Infraestructura/Persistencia/Modelos` |
+| `use Illuminate\Support\Facades\Event` | ✅ Aceptado | Dispatcher de eventos de dominio |
+| `new DatosEmpresa()` leyendo `config()` | ❌ Prohibido | El dato entra por constructor desde el adaptador |
+
+**Comando de auditoría (debe dar 0 resultados):**
+
+```bash
+grep -rn "use App\\Infraestructura" app/Core   # -> 0
+grep -rn "use Illuminate\\Support\\Facades\\\(DB\|Schema\)" app/Core  # -> 0
+```
+
+### Centralización de dependencias
+
+- **Todos los `bind(Interfaz::class, Implementacion::class)` viven en**
+  `app/Providers/CoreServiceProvider.php` (método `register`).
+- `app/Providers/AppServiceProvider.php` queda reservado a configuración de framework
+  (p.ej. forzar HTTPS en producción), no a bindings de negocio.
+- Gracias a esta regla, los Casos de Uso son 100% portables y testeables con mocks.
+
+---
+
 ## 3. Flujo de una Request (detallado)
 
 ```
@@ -123,10 +159,14 @@ app/
 
 ## 4. Contratos (Interfaces) del Dominio
 
-### 4.1 Repositorio Base
+### 4.1 Repositorio Base (concepto)
+
+A modo de referencia, todo repositorio de dominio sigue este contrato mínimo (en la
+práctica cada `InterfazRepositorio*` declara sus propios métodos tipados con la entidad
+correspondiente, no hay una interfaz genérica compartida):
 
 ```php
-interface InterfazRepositorioGenerico
+interface InterfazRepositorioBase
 {
     public function guardar(object $entidad): void;
     public function eliminar(int $id): void;
@@ -134,67 +174,90 @@ interface InterfazRepositorioGenerico
 }
 ```
 
-### 4.2 Repositorios Específicos
+### 4.2 Puertos de Repositorio (persistencia)
+
+Cada entidad de dominio tiene su interfaz en `Core/Dominio/Repositorios/`. Ejemplo real
+de `InterfazRepositorioPago`:
 
 ```php
-interface InterfazRepositorioCotizacion
-{
-    public function guardar(Cotizacion $cotizacion): void;
-    public function obtenerPorId(int $id): ?Cotizacion;
-    public function obtenerPorCodigo(CodigoCorrelativo $codigo): ?Cotizacion;
-    public function listar(array $filtros, int $pagina, int $porPagina): array;
-    public function eliminar(int $id): void;
-    public function contarPorEstado(EstadoCotizacion $estado): int;
-}
-
-interface InterfazRepositorioReserva
-{
-    public function guardar(Reserva $reserva): void;
-    public function obtenerPorId(int $id): ?Reserva;
-    public function listar(array $filtros, int $pagina, int $porPagina): array;
-    public function eliminar(int $id): void;
-    public function obtenerPorCotizacion(int $idCotizacion): ?Reserva;
-}
-
-interface InterfazRepositorioCliente
-{
-    public function guardar(Cliente $cliente): void;
-    public function obtenerPorId(int $id): ?Cliente;
-    public function buscarPorDocumento(DocumentoIdentidad $doc): ?Cliente;
-    public function buscar(string $termino): array;
-}
-
-interface InterfazRepositorioUsuario
-{
-    public function guardar(Usuario $usuario): void;
-    public function obtenerPorId(int $id): ?Usuario;
-    public function obtenerPorEmail(Email $email): ?Usuario;
-    public function listarPorRol(Rol $rol): array;
-}
-
 interface InterfazRepositorioPago
 {
     public function guardar(Pago $pago): void;
     public function obtenerPorId(int $id): ?Pago;
-    public function listarPorReserva(int $idReserva): array;
+    public function listarPorReserva(int $idReserva): array;   // devuelve Pago[]
     public function anular(Pago $pago): void;
     public function sumarPagosReserva(int $idReserva): Precio;
 }
-
-interface InterfazRepositorioPasajero { ... }
-interface InterfazRepositorioLead { ... }
-interface InterfazRepositorioSeguimiento { ... }
-interface InterfazRepositorioAlojamiento { ... }
-interface InterfazRepositorioServicioReserva { ... }
-interface InterfazRepositorioPlantilla { ... }
-interface InterfazRepositorioRuta { ... }
-interface InterfazRepositorioMotivoPerdida { ... }
-interface InterfazRepositorioAuditoria { ... }
-interface InterfazRepositorioSecuenciaCodigo { ... }
-interface InterfazRepositorioPolitica { ... }
-interface InterfazRepositorioCanalOrigen { ... }
-interface InterfazRepositorioRol { ... }
 ```
+
+**Lista real de puertos de repositorio** (`app/Core/Dominio/Repositorios/`):
+
+| Puerto | Implementación Eloquent |
+|--------|-------------------------|
+| `InterfazRepositorioCotizacion` | `RepositorioCotizacionEloquent` |
+| `InterfazRepositorioReserva` | `RepositorioReservaEloquent` |
+| `InterfazRepositorioCliente` | `RepositorioClienteEloquent` |
+| `InterfazRepositorioUsuario` | `RepositorioUsuarioEloquent` |
+| `InterfazRepositorioPago` | `RepositorioPagoEloquent` |
+| `InterfazRepositorioPasajero` | `RepositorioPasajeroEloquent` |
+| `InterfazRepositorioLead` | `RepositorioLeadEloquent` |
+| `InterfazRepositorioSeguimiento` | `RepositorioSeguimientoEloquent` |
+| `InterfazRepositorioPlantilla` | `RepositorioPlantillaEloquent` |
+| `InterfazRepositorioPaquete` | `RepositorioPaqueteEloquent` |
+| `InterfazRepositorioAlojamiento` | `RepositorioAlojamientoEloquent` |
+| `InterfazRepositorioHotel` | `RepositorioHotelEloquent` |
+| `InterfazRepositorioMovilidad` | `RepositorioMovilidadEloquent` |
+| `InterfazRepositorioServicioReserva` | `RepositorioServicioReservaEloquent` |
+| `InterfazRepositorioMotivoPerdida` | `RepositorioMotivoPerdidaEloquent` |
+| `InterfazRepositorioAuditoria` | `RepositorioAuditoriaEloquent` |
+| `InterfazRepositorioSecuenciaCodigo` | `RepositorioSecuenciaCodigoEloquent` |
+| `InterfazRepositorioItemCotizacion` | `RepositorioItemCotizacionEloquent` |
+| `InterfazRepositorioPoliticaConfiguracion` | `RepositorioPoliticaConfiguracionEloquent` |
+
+> **Nota:** `cotizacion_detalle` y `politicas_configuracion` no tienen entidad de dominio
+> propia; se exponen vía DTO de aplicación (`ItemCotizacionDto`) o entidad
+> (`PoliticaConfiguracion`) a través de sus respectivos puertos, sin que el Core toque Eloquent.
+
+### 4.3 Puertos de Fuente Externa (Anti-Corrupción)
+
+Para **acoplar varios sistemas** (WooCommerce, APIs de hoteles/movilidades) sin que el
+dominio aprenda sus formatos, existen puertos de entrada/salida externa resueltos por
+adaptadores HTTP en `Infraestructura/Adaptadores/`:
+
+| Puerto | Adaptador | Origen |
+|--------|-----------|--------|
+| `InterfazFuentePaquetes` | `AdaptadorWooCommerce` | WooCommerce (REST) |
+| `InterfazFuenteHoteles` | `AdaptadorHotelHttp` | API de hoteles (HTTP) |
+| `InterfazFuenteMovilidades` | `AdaptadorMovilidadHttp` | API de movilidades (HTTP) |
+
+### 4.4 Puertos de Servicio (salida / infraestructura)
+
+Casos de uso que necesitan una capacidad externa (PDF, transacción) dependen de estos
+puertos en `Core/Aplicacion/Puertos/`:
+
+| Puerto | Implementación | Responsabilidad |
+|--------|----------------|-----------------|
+| `InterfazGeneradorDocumentoPdf` | `GeneradorDocumentoPdfDomPdf` | Renderizar `DocumentoPdfDto` a binario PDF |
+| `InterfazUnidadDeTrabajo` | `UnidadDeTrabajoEloquent` | Envolver operaciones en `DB::transaction` |
+
+```php
+// Core/Aplicacion/Puertos/InterfazGeneradorDocumentoPdf.php
+interface InterfazGeneradorDocumentoPdf
+{
+    public function generar(DocumentoPdfDto $datos): string;  // devuelve binario PDF
+}
+
+// Core/Aplicacion/Puertos/InterfazUnidadDeTrabajo.php
+interface InterfazUnidadDeTrabajo
+{
+    /** @template T  @param callable(): T $operacion  @return T */
+    public function transaccion(callable $operacion): mixed;
+}
+```
+
+> **`DatosEmpresa` (Value Object del dominio) no lee `config()`.** El adaptador
+> `GeneradorDocumentoPdfDomPdf` (Infraestructura) lee `config('empresa')` y construye
+> `DatosEmpresa::desdeArray($config)`, manteniendo el Core libre de facades de Laravel.
 
 ---
 
@@ -223,7 +286,8 @@ Cada caso de uso es una clase con un solo método público `ejecutar()`.
 | `AnularReservaUseCase` | id, motivo | void | R4 |
 | `RegistrarPagoUseCase` | id_reserva, monto, metodo | PagoDTO | R2, R4 |
 | `AnularPagoUseCase` | id_pago | void | R4 |
-| `GenerarPDFReservaUseCase` | id_reserva | PDF (binario) | — |
+| `GenerarPdfReservaUseCase` | id_reserva | PDF (binario) | — |
+| `GenerarPdfCotizacionUseCase` | id_cotizacion | PDF (binario) | — |
 | `ListarReservasUseCase` | filtros, pagina | PaginacionDTO | — |
 | `ObtenerReservaUseCase` | id | ReservaDTO | — |
 
@@ -294,6 +358,11 @@ La infraestructura es responsable de convertir entre el mundo Eloquent y el mund
 
 ## 7. Service Providers (Inyección de Dependencias)
 
+**Todos los `bind` de puertos → adaptadores se concentran en `CoreServiceProvider`
+(método `register`).** Es el único lugar donde se casan interfaces de `Core` con
+implementaciones de `Infraestructura`. `AppServiceProvider` solo maneja configuración de
+framework (p.ej. `URL::forceScheme('https')` en producción).
+
 ```php
 // app/Providers/CoreServiceProvider.php
 
@@ -301,46 +370,55 @@ class CoreServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // Repositorios
+        // 1) Repositorios de dominio (Eloquent)
         $this->app->bind(
             InterfazRepositorioCotizacion::class,
-            RepositorioCotizacionEloquet::class
+            RepositorioCotizacionEloquent::class
         );
         $this->app->bind(
             InterfazRepositorioReserva::class,
-            RepositorioReservaEloquet::class
+            RepositorioReservaEloquent::class
         );
-        // ... todos los repositorios
-
-        // Servicios de infraestructura
+        // ... todos los InterfazRepositorio* -> Repositorio*Eloquent
         $this->app->bind(
-            InterfazServicioPdf::class,
-            ServicioPdfDomPdf::class
+            InterfazRepositorioItemCotizacion::class,
+            RepositorioItemCotizacionEloquent::class
         );
         $this->app->bind(
-            InterfazServicioCorreo::class,
-            ServicioCorreoLaravel::class
+            InterfazRepositorioPoliticaConfiguracion::class,
+            RepositorioPoliticaConfiguracionEloquent::class
         );
-    }
 
-    public function boot(): void
-    {
-        // Registrar Eventos de Dominio → Listeners
-        Event::listen(
-            CotizacionEnviada::class,
-            CrearSeguimientoListener::class
+        // 2) Fuentes externas (Anti-Corrupción)
+        $this->app->bind(
+            InterfazFuentePaquetes::class,
+            AdaptadorWooCommerce::class
         );
-        Event::listen(
-            ReservaConfirmada::class,
-            [GenerarPDFListener::class, 'manejar']
+        $this->app->bind(
+            InterfazFuenteHoteles::class,
+            AdaptadorHotelHttp::class
         );
-        Event::listen(
-            PagoRegistrado::class,
-            VerificarSaldoListener::class
+        $this->app->bind(
+            InterfazFuenteMovilidades::class,
+            AdaptadorMovilidadHttp::class
+        );
+
+        // 3) Servicios de salida (infraestructura)
+        $this->app->bind(
+            InterfazGeneradorDocumentoPdf::class,
+            GeneradorDocumentoPdfDomPdf::class
+        );
+        $this->app->bind(
+            InterfazUnidadDeTrabajo::class,
+            UnidadDeTrabajoEloquent::class
         );
     }
 }
 ```
+
+> Si un Caso de Uso necesita una nueva dependencia, se crea el **puerto en `Core`** y su
+> **adaptador en `Infraestructura`**, y se registra aquí. Nunca se instancia una clase de
+> `Infraestructura` directamente desde `Core`.
 
 ---
 
