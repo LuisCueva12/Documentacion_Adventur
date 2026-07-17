@@ -40,7 +40,7 @@ Docs/
 │   ├── 02_Reportes_Gestion.md                   — 4 reportes + dashboard, filtros, formatos
 │   └── 03_Criterios_Aceptacion.md               — CA-01 a CA-10, checklist pre-producción, regla final
 │
-└── CARPETA_06_ARQUITECTURA_TECNICA/             (8 archivos)
+└── CARPETA_06_ARQUITECTURA_TECNICA/             (10 archivos)
     ├── 00_Vision_General.md                     — Stack, principios, diagrama general, escalabilidad
     ├── 00_Diagrama_Arquitectura.svg             — Diagrama visual completo (SVG)
     ├── 01_Backend_Laravel_Hexagonal.md          — Hexagonal + DDD, capas, repositorios, casos de uso
@@ -49,7 +49,8 @@ Docs/
     ├── 04_Flujo_Datos.md                        — Flujo completo request→response, FSM unificadas
     ├── 05_Despliegue.md                         — SiteGround → VPS, backup, CI/CD, costos
     ├── 06_Modelo_Datos_PostgreSQL.md            — DDL completo, 22 tablas, ENUMs, índices, RLS
-    └── 07_Matriz_Trazabilidad.md                — RF/NF/CA → código, FSM, módulos, eventos, excepciones
+    ├── 07_Matriz_Trazabilidad.md                — RF/NF/CA → código, FSM, módulos, eventos, excepciones
+    └── 08_Catalogos_Externos_Copias_Operativas.md — Adaptadores, instantáneas editables y trazabilidad
 ```
 
 **Total: 29 archivos — 3,070+ líneas de especificación agnóstica + arquitectura técnica**
@@ -70,7 +71,7 @@ Docs/
 | Reportes | CARPETA 03 (KPIs) + CARPETA 05 (reportes, dashboard) |
 | Configuración | CARPETA 04 (RBAC, auditoría) |
 | Documentos PDF | CARPETA 05 (estructura, maquetas) |
-| Arquitectura Técnica | CARPETA 06 (stack, endpoints, frontend, flujo, despliegue) |
+| Arquitectura Técnica | CARPETA 06 (stack, endpoints, frontend, flujo, despliegue y catálogos externos) |
 
 ---
 
@@ -82,6 +83,7 @@ Docs/
 | R2 | Truncamiento a 2 decimales en TODAS las operaciones monetarias | 03/04 |
 | R3 | Auditoría de solo inserción, NUNCA modificación | 04/02 |
 | R4 | Prohibición de eliminación física (soft delete obligatorio) | 04/03 |
+| R5 | Los catálogos externos originan copias operativas editables e históricas | 06/08 |
 
 ---
 

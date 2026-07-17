@@ -1,7 +1,7 @@
 # Documento PDF Automático de 2 Páginas
 
 **Carpeta:** 05 — Salidas del Sistema  
-**Versión:** 1.0 — Especificación Agnóstica
+**Versión:** 1.1 — Especificación funcional y visual
 
 ---
 
@@ -55,6 +55,7 @@ ESTRUCTURA_DATOS_PDF {
     // ═══════════════════════════════════════
     items: Lista de {
         concepto:              Texto(255)         // "Movilidad", "Guía", "Entradas", ...
+        detalle:               Texto(500) | NULL  // Descripción breve, ruta o alcance
         cantidad:              Entero             // 1, 2, ...
         precio_unitario:       Decimal(10,2)      // 200.00
         subtotal:              Decimal(10,2)      // 200.00
@@ -120,6 +121,22 @@ ESTRUCTURA_DATOS_PDF {
 ---
 
 ## 2. Maqueta de la Página 1 (Detalle Comercial y Operativo)
+
+### 2.1 Identidad visual aprobada
+
+La salida se genera en formato **A4 vertical** y mantiene exactamente **dos páginas**:
+
+- Color principal azul marino `#071F5C` y acento dorado `#F9BF00`.
+- Franja corporativa vertical en el margen izquierdo, logotipo Adventur y recorrido aéreo decorativo en la cabecera.
+- Título principal `COTIZACIÓN` o `CONFIRMACIÓN`, acompañado de código, emisión y vigencia o estado.
+- Página 1 organizada en: datos de la propuesta, detalle de pasajeros, servicios cotizados, condiciones comerciales, inversión total y pie corporativo.
+- Página 2 reservada para políticas y condiciones, conservando la misma cabecera, paleta y pie corporativo.
+- Tablas, bordes y tamaños optimizados para DomPDF; el logotipo se carga desde un recurso local, sin depender de Internet.
+- Si existen más de tres servicios, se muestran los dos primeros y el resto se consolida en una fila `Otros N servicios`, conservando el importe acumulado y evitando una tercera página.
+
+Las categorías de pasajeros (adulto, niño u otras) solo deben mostrarse cuando el modelo de datos las registre expresamente. En caso contrario, el PDF presenta la cantidad total de pasajeros y no inventa tarifas diferenciadas.
+
+La siguiente maqueta conserva la referencia funcional de campos. La composición visual final se rige por las reglas anteriores.
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗

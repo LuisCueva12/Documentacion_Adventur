@@ -148,6 +148,9 @@
 | 5 | precio_unitario | Decimal(10,2) | SÍ | `>= 0.00` |
 | 6 | cantidad | Entero | SÍ | `>= 1` |
 | 7 | subtotal | Decimal(10,2) | SÍ (calculado) | `= precio_unitario * cantidad` |
+| 8 | tipo_origen | Lista(Enum) | NO | Valores: `paquete`, `hotel`, `movilidad`, `manual` |
+| 9 | id_origen | Texto(255) | NO | ID del registro en el catálogo local que originó la copia |
+| 10 | codigo_origen | Texto(255) | NO | ID estable de la fuente externa (`wp_id` o código externo) |
 
 ---
 
@@ -248,6 +251,8 @@
 | 22 | fecha_creacion | FechaHora | SÍ | |
 | 23 | fecha_actualizacion | FechaHora | SÍ | |
 | 24 | fecha_eliminacion | FechaHora | NO | Soft delete |
+| 25 | movilidad_catalogo_id | ID | NO | ID de referencia en el catálogo local; no reemplaza a `movilidad_asignada` |
+| 26 | movilidad_codigo_externo | Texto(255) | NO | Código estable de la movilidad en el sistema fuente |
 
 ---
 
@@ -364,6 +369,9 @@
 | 11 | fecha_creacion | FechaHora | SÍ | |
 | 12 | fecha_actualizacion | FechaHora | SÍ | |
 | 13 | fecha_eliminacion | FechaHora | NO | Soft delete |
+| 14 | hotel_catalogo_id | ID | NO | ID del hotel local que originó la copia |
+| 15 | hotel_codigo_externo | Texto(255) | NO | Código estable del hotel en el sistema fuente |
+| 16 | habitacion_codigo_externo | Texto(255) | NO | Código estable de la habitación seleccionada |
 
 ---
 
@@ -384,3 +392,6 @@
 | 11 | fecha_creacion | FechaHora | SÍ | |
 | 12 | fecha_actualizacion | FechaHora | SÍ | |
 | 13 | fecha_eliminacion | FechaHora | NO | Soft delete |
+| 14 | tipo_origen | Lista(Enum) | NO | Valores: `paquete`, `hotel`, `movilidad`, `manual` |
+| 15 | id_origen | Texto(255) | NO | ID del catálogo local que originó la copia |
+| 16 | codigo_origen | Texto(255) | NO | Código estable en la fuente externa |
