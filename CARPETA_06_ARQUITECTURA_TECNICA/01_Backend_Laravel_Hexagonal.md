@@ -155,6 +155,21 @@ grep -rn "use Illuminate\\Support\\Facades\\\(DB\|Schema\)" app/Core  # -> 0
 7. Navegador ← JSON Response           │
 ```
 
+### 3.1 Patrón aplicado al módulo administrativo
+
+La administración se divide por responsabilidad y no utiliza un controlador monolítico:
+
+```text
+FormRequest → DTO inmutable → Caso de uso → Puerto → Adaptador Eloquent
+                    └──────── ServicioAuditoria + UnidadDeTrabajo ────────┘
+```
+
+- `UsuarioAdministracionControlador`, `RolAdministracionControlador` y `PoliticaDocumentoControlador` no importan modelos, `DB` ni clases de Infraestructura.
+- Cada escritura tiene un caso de uso independiente; la validación sintáctica vive en `FormRequest` y las reglas cruzadas se garantizan nuevamente en Aplicación.
+- El hash de contraseña pertenece al adaptador de persistencia y nunca se expone en DTOs de salida ni auditoría.
+- Usuarios y políticas se auditan mediante `ServicioAuditoria` dentro de la misma unidad de trabajo.
+- Las consultas administrativas usan puertos de Aplicación porque devuelven proyecciones paginadas, no agregados completos del Dominio.
+
 ---
 
 ## 4. Contratos (Interfaces) del Dominio
@@ -239,6 +254,8 @@ puertos en `Core/Aplicacion/Puertos/`:
 |--------|----------------|-----------------|
 | `InterfazGeneradorDocumentoPdf` | `GeneradorDocumentoPdfDomPdf` | Renderizar `DocumentoPdfDto` a binario PDF |
 | `InterfazUnidadDeTrabajo` | `UnidadDeTrabajoEloquent` | Envolver operaciones en `DB::transaction` |
+| `InterfazRepositorioUsuarioAdministracion` | `RepositorioUsuarioAdministracionEloquent` | Proyección y comandos administrativos de usuarios |
+| `InterfazRepositorioRolAdministracion` | `RepositorioRolAdministracionEloquent` | Consulta desacoplada del catálogo de roles |
 
 ```php
 // Core/Aplicacion/Puertos/InterfazGeneradorDocumentoPdf.php
