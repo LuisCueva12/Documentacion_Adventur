@@ -99,8 +99,8 @@ SESSION_DOMAIN=.adventur.com
 ```bash
 # 1. Compilar Frontend
 cd adventur-frontend
-npm install
-npm run build
+pnpm install
+pnpm run build
 # → genera dist/
 
 # 2. Subir frontend a SiteGround
@@ -452,12 +452,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run build
 ```
 
 ### 7.2 Flujo de CD
@@ -491,8 +496,8 @@ jobs:
             sudo supervisorctl restart adventur-worker:*
             cd /var/www/adventur-frontend
             git pull origin main
-            npm ci
-            npm run build
+            pnpm install --frozen-lockfile
+            pnpm run build
 ```
 
 ---

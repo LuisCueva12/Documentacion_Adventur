@@ -524,7 +524,7 @@ PrimeVue maneja responsive automáticamente en DataTable y formularios. Tailwind
 ### Desarrollo
 
 ```bash
-npm run dev    # → http://localhost:5173
+pnpm run dev    # → http://localhost:5173
 ```
 
 Proxy automático de `/api` a Laravel:
@@ -547,7 +547,7 @@ export default defineConfig({
 ### Producción
 
 ```bash
-npm run build    # → dist/ (archivos estáticos)
+pnpm run build    # → dist/ (archivos estáticos)
 
 # En SiteGround: copiar dist/ a public_html/
 # En VPS: Nginx apunta a dist/
