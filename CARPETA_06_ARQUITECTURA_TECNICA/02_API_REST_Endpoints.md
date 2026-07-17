@@ -674,7 +674,26 @@ Resumen ejecutivo para la pantalla principal.
 ### `POST /api/admin/usuarios`
 ### `PUT /api/admin/usuarios/{id}/rol`
 ### `GET /api/admin/configuracion/politicas`
+
+Devuelve, en orden de presentación, las cuatro políticas que alimentan la segunda página del PDF: cancelación, pagos, responsabilidad y términos generales. Requiere permiso `politicas.ver`.
+
 ### `PUT /api/admin/configuracion/politicas`
+
+Actualiza una o varias políticas. Requiere permiso `politicas.editar`; cada cambio incrementa la versión y genera un registro de auditoría.
+
+```json
+{
+  "politicas": [
+    {
+      "tipo": "politica_cancelacion",
+      "contenido": "Texto vigente que aparecerá en el documento."
+    }
+  ]
+}
+```
+
+Los tipos permitidos son `politica_cancelacion`, `politica_pagos`, `politica_responsabilidad` y `terminos_servicio`. Configuraciones numéricas como IGV, vigencia o porcentaje de adelanto no se renderizan como políticas.
+
 ### `GET /api/admin/catalogos/motivos-perdida`
 ### `GET /api/admin/catalogos/canales-origen`
 ### `GET /api/admin/catalogos/plantillas`

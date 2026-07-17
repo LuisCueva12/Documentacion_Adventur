@@ -39,7 +39,7 @@
 | RF-16 | Reportes exportables (PDF/Excel) | `GET /api/reportes/ventas`, `/conversion`, `/rendimiento` | `GenerarReporteVentasUseCase`, `GenerarReporteConversionUseCase` | `ReporteControlador@ventas`, `@conversion`, `@rendimiento` | Exportación con `maatwebsite/laravel-excel`, PDF con DomPdf, gráficos Chart.js en frontend |
 | RF-17 | Historial de auditoría de acciones sensibles | `GET /api/auditoria` | `RegistrarAuditoriaUseCase` | `AuditoriaControlador@index` | Listeners de eventos de dominio, tabla `auditoria` solo INSERT, particionada por año |
 | RF-18 | Cancelación lógica (anulación) de reservas | `DELETE /api/reservas/{id}` | `AnularReservaUseCase` | `ReservaControlador@destroy` | Soft delete + registro motivo/fecha/usuario, transición a estado `Anulada` |
-| RF-19 | Políticas configurables en PDF | `PUT /api/admin/configuracion/politicas` | `GestionarPoliticasUseCase` | `AdminControlador@actualizarPoliticas` | Tabla `politicas_configuracion` con secciones, inyección en página 2 del PDF |
+| RF-19 | Políticas configurables en PDF | `GET/PUT /api/v1/admin/configuracion/politicas` | `ServicioPoliticasDocumento` | `AdminControlador@listarPoliticas` / `@actualizarPoliticas` | Cuatro políticas documentales ordenadas, edición versionada, auditoría e inyección filtrada en página 2; configuraciones numéricas quedan excluidas |
 | RF-20 | Control de acceso RBAC (6 roles) | Middleware en rutas + frontend guards | `VerificarPermisoUseCase` | Middleware `RoleMiddleware` | `spatie/laravel-permission` o tabla `rol_permiso`, Vue Router guards, `v-if` en componentes |
 
 ---
@@ -114,7 +114,7 @@
 | **Global/Infra** | `SecuenciaCodigo`, `Auditoria` | `InterfazRepositorioSecuenciaCodigo`, `InterfazRepositorioAuditoria` | `GenerarSecuenciaCodigoUseCase`, `RegistrarAuditoriaUseCase` | — (llamado internamente) | — |
 | **Reportes** | — (solo consultas) | — | `GenerarReporteVentasUseCase`, `GenerarReporteConversionUseCase`, `GenerarReporteRendimientoUseCase` | `ReporteControlador` | `vistas/reportes/`, `componentes/charts/` |
 | **Dashboard** | — (solo consultas) | — | `ObtenerDashboardResumenUseCase` | `DashboardControlador` | `vistas/dashboard/`, `componentes/modulos/dashboard/` |
-| **Admin/Config** | `Politica`, `Plantilla`, `Ruta`, `MotivoPerdida`, `CanalOrigen` | `InterfazRepositorioPolitica`, `InterfazRepositorioPlantilla`, `InterfazRepositorioRuta`, `InterfazRepositorioMotivoPerdida`, `InterfazRepositorioCanalOrigen` | `GestionarPoliticasUseCase`, `GestionarPlantillasUseCase`, `GestionarUsuariosUseCase` | `AdminControlador` | `vistas/admin/`, `componentes/modulos/admin/` |
+| **Admin/Config** | `PoliticaConfiguracion`, `Plantilla`, `MotivoPerdida`, `CanalOrigen` | `InterfazRepositorioPoliticaConfiguracion`, `InterfazRepositorioPlantilla`, `InterfazRepositorioMotivoPerdida` | `ServicioPoliticasDocumento` y gestión administrativa | `AdminControlador` | `src/views/Administracion/PoliticasDocumento.vue`, `UsuariosLista.vue` |
 
 ---
 

@@ -300,6 +300,12 @@ const rutas = [
         component: () => import('@/vistas/admin/UsuariosView.vue'),
         meta: { titulo: 'Usuarios', roles: ['Admin'] },
       },
+      {
+        path: 'admin/politicas',
+        name: 'AdminPoliticasDocumento',
+        component: () => import('@/vistas/admin/PoliticasDocumentoView.vue'),
+        meta: { titulo: 'Políticas del PDF', permiso: 'politicas' },
+      },
     ],
   },
 ]

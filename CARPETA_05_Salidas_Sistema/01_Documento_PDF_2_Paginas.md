@@ -128,9 +128,9 @@ La salida se genera en formato **A4 vertical** y mantiene exactamente **dos pág
 
 - Color principal azul marino `#071F5C` y acento dorado `#F9BF00`.
 - Franja corporativa vertical en el margen izquierdo, logotipo Adventur y recorrido aéreo decorativo en la cabecera.
-- Título principal `COTIZACIÓN` o `CONFIRMACIÓN`, acompañado de código, emisión y vigencia o estado.
+- Título principal `COTIZACIÓN`, `CONFIRMACIÓN` o `CONDICIONES` con jerarquía moderada: debe destacar sin dominar la página; el contenido operativo utiliza una tipografía mayor, oscura y legible.
 - Página 1 organizada en: datos de la propuesta, detalle de pasajeros, servicios cotizados, condiciones comerciales, inversión total y pie corporativo.
-- Página 2 reservada para políticas y condiciones, conservando la misma cabecera, paleta y pie corporativo.
+- Página 2 reservada para políticas y condiciones, repitiendo la cabecera completa, metadatos, franja lateral, paleta y pie corporativo de la primera página.
 - Tablas, bordes y tamaños optimizados para DomPDF; el logotipo se carga desde un recurso local, sin depender de Internet.
 - Si existen más de tres servicios, se muestran los dos primeros y el resto se consolida en una fila `Otros N servicios`, conservando el importe acumulado y evitando una tercera página.
 
